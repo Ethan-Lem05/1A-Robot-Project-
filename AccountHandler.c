@@ -1,8 +1,6 @@
 /*
 This account will handle the accounts
 */
-task main() {
-	}
 
 //set up parallel arrays
 const int NUM_ACC = 4;
@@ -18,11 +16,13 @@ int searchByID(string ID) {
 	return 0;
 }
 void downloadData(string &names, string &studentIDs, float &balances) {
-
 }
 
 void uploadData() {
-
+	if(bEv3FileExists("./TextFiles/Account.txt")){
+		string pData = "hello world";
+		fileWriteData(500, pData, 20);
+	}
 }
 
 void buyProduct(string studentID, float cost) {
