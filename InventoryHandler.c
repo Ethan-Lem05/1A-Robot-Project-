@@ -1,8 +1,16 @@
+#include "PortBindings.c"
 /*
 This file will handle Inventory
 */
-#include "main.c";
 
-void downloadData() {
+struct Module{
+	float xCoord;
+	float yCoord;
+	int stock;
+}
+void downloadDataInventory() {
+
+}
+void uploadDataInventory() {
 
 }
