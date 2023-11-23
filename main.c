@@ -6,7 +6,9 @@ This file is responsible for running all the code as well as storing any constan
 #include "UIHandler.c";
 #include "AccountHandler.c";
 #include "InventoryHandler.c";
-
+/**
+holds all the different possible robot states
+*/
 enum RobotState
 {
 	IDLE_STATE,
@@ -15,8 +17,10 @@ enum RobotState
 	DELIVERY_STATE
 };
 
-/*
+/**
 runs if robot is in idle state
+
+@returns returns the robots next state.
 */
 RobotState idleState() {
 	clearTimer(T1);
@@ -26,25 +30,41 @@ RobotState idleState() {
 	{}
 	return SELECTION_STATE;
 }
-/*
+/**
 runs if robot is in selection state
 */
-RobotState selectionState () {
-	return IDLE_STATE;
+RobotState selectionState (int & drinkChoice) {
+	//prompt user for input
+	drinkChoice = getDrinkSelection();
+	//select the drink choice by reference
+	return PAYMENT_STATE;
 }
 /*
 runs if robot is in payment state
+
+@returns returns the robots next state.
 */
-RobotState paymentState () {
-	return IDLE_STATE;
+RobotState paymentState (int userChoice) {
+	//let user scan
+	int userID = scanID();
+	//buyProduct(userID, choice.cost);
+	//validate that user can pay for drink -> if not return the user to the selection drink so they can make a cheaper purchase
+
+	//make the payment
+	return DELIVERY_STATE;
 }
 /*
-runs if robot is in delivery state
+runs if robot is in delivery state.
+
+@returns returns the robots next state.
 */
 RobotState deliveryState () {
+
 	return IDLE_STATE;
 }
-
+/**
+configures all the senors and motors to their proper state
+*/
 void configuration() {
 	  // Configure Color Sensor on Port 1
     SensorType[COLOR_SENSOR] = sensorEV3_Color;
@@ -73,24 +93,27 @@ void configuration() {
     nMotorEncoder[MESHED_WHEEL_MOTOR] = 0;
     motor[MESHED_WHEEL_MOTOR] = 0;
 }
+void initialize() {
+
+}
 /*
 	main task
 */
 task main()
 {
 	configuration();
-	getDrinkSelection();
 	RobotState state = IDLE_STATE;
+	int drinkChoice = 0; // number that ranges from 0-3 indicating which module the drink belongs to
 	while(true) {
 		switch(state){
 		case IDLE_STATE:
 			state = idleState();
 			break;
 		case SELECTION_STATE:
-			state = selectionState();
+			state = selectionState(drinkChoice);
 			break;
 		case PAYMENT_STATE:
-			state = paymentState();
+			state = paymentState(drinkChoice);
 			break;
 		case DELIVERY_STATE:
 			state = deliveryState();

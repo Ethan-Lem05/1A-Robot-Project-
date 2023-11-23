@@ -2,8 +2,13 @@
 This File will be used for UI input from the EV3 brick
 */
 #include "PortBindings.c"
+#include "AccountHandler.c"
+#include "PC_FileIO.c"
 
-/*
+/**
+Allows the user to select a drink module to buy from
+
+@returns the relevant module
 */
 int getDrinkSelection() {
 	// display choose your drink for 5 seconds
@@ -16,6 +21,7 @@ int getDrinkSelection() {
 	eraseDisplay();
 	displayBigTextLine(2, "row: %d", row);
 	displayBigTextLine(6, "col: %d", col);
+	//detect buttons pressed on the EV3
 	while(!getButtonPress(buttonEnter)) {
 		if(getButtonPress(buttonUp) || getButtonPress(buttonDown)) {
 			row == 1 ? row = 0: row = 1;
@@ -26,18 +32,22 @@ int getDrinkSelection() {
 			displayBigTextLine(6, "col: %d", col);
 		}
 	}
-	int
-	// once drink is selected
+	// once drink is selected return the corresponding module
+	return row + col; // equation for selecting module
 }
 
 /*
+may not be impleemnted
 */
 void detectDrinkRemoved() {
 
 }
 
-/*
-*/
-void scanID() {
+/**
+ gets the user ID using the color sensor
 
+ @return the ID related to the color the color sensor identifies
+*/
+int scanID() {
+	return SensorValue[COLOR_SENSOR];
 }
