@@ -33,9 +33,9 @@ RobotState idleState() {
 /**
 runs if robot is in selection state
 */
-RobotState selectionState (int & drinkChoice) {
+RobotState selectionState (int & row, int & col) {
 	//prompt user for input
-	drinkChoice = getDrinkSelection();
+	drinkChoice = getDrinkSelection(row, col);
 	//select the drink choice by reference
 	return PAYMENT_STATE;
 }
@@ -44,7 +44,7 @@ runs if robot is in payment state
 
 @returns returns the robots next state.
 */
-RobotState paymentState (int userChoice) {
+RobotState paymentState (int row, int col) {
 	//let user scan
 	int userID = scanID();
 	//buyProduct(userID, choice.cost);
@@ -59,7 +59,7 @@ runs if robot is in delivery state.
 @returns returns the robots next state.
 */
 RobotState deliveryState () {
-
+	mov
 	return IDLE_STATE;
 }
 /**
@@ -103,17 +103,18 @@ task main()
 {
 	configuration();
 	RobotState state = IDLE_STATE;
-	int drinkChoice = 0; // number that ranges from 0-3 indicating which module the drink belongs to
+	int row = 0; // number that ranges from 0-3 indicating which module the drink belongs to
+	int col = 0;
 	while(true) {
 		switch(state){
 		case IDLE_STATE:
 			state = idleState();
 			break;
 		case SELECTION_STATE:
-			state = selectionState(drinkChoice);
+			state = selectionState(row,col);
 			break;
 		case PAYMENT_STATE:
-			state = paymentState(drinkChoice);
+			state = paymentState(row, col);
 			break;
 		case DELIVERY_STATE:
 			state = deliveryState();

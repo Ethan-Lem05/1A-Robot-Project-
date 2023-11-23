@@ -1,0 +1,4 @@
+1      Ethan      100.00
+2      Ethan      100.00
+3      Edison     100.00
+4      Luke       0.00

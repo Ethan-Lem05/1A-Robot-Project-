@@ -30,9 +30,9 @@ void downloadData() {
 		for(int i = 0; i < NUM_ACC; i++) {
 			if(i == 0) {
 				readTextPC(fin,name);
-			} else if (i == 1) {
+				} else if (i == 1) {
 				readIntPC(fin,id);
-			} else {
+				} else {
 				readFloatPC(fin,balance);
 			}
 			Account account;
@@ -50,7 +50,10 @@ void uploadData() {
 	TFileHandle fout;
 	if(openWritePC(fout,"account.txt")){
 		for(int i = 0; i < NUM_ACC; i++) {
-			//writeTextPC(fout,);
+			string output = "%d     %s     %f";
+			sprintf(output,output,accounts[i].ID,accounts[i].name,accounts[i].balance);
+
+			writeTextPC(fout, output);
 		}
 	}
 }
@@ -60,12 +63,9 @@ takes in the studentID and cost and returns whether or not the purchase was succ
 bool buyProduct(int userID, float cost) {
 	for(int i = 0; i < NUM_ACC; i++) {
 		if(accounts[i].ID == userID && cost <= accounts[i].balance) {
-				accounts[i].balance -= cost;
-				return true;
+			accounts[i].balance -= cost;
+			return true;
 		}
 	}
 	return false;
 }
-/**
-get account by ID
-*/

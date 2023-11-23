@@ -10,13 +10,12 @@ Allows the user to select a drink module to buy from
 
 @returns the relevant module
 */
-int getDrinkSelection() {
+void getDrinkSelection(int & row, int & col) {
+	//reset values
 	// display choose your drink for 5 seconds
 	displayBigTextLine(6, "Input your drink of choice?");
 	wait1Msec(5000);
 	// display select screen
-	int row = 0;
-	int col = 0;
 	char rowVal = 'a';
 	eraseDisplay();
 	displayBigTextLine(2, "row: %d", row);
@@ -24,7 +23,7 @@ int getDrinkSelection() {
 	//detect buttons pressed on the EV3
 	while(!getButtonPress(buttonEnter)) {
 		if(getButtonPress(buttonUp) || getButtonPress(buttonDown)) {
-			row == 1 ? row = 0: row = 1;
+			row == 1 ? row = 2: row = 1;
 			displayBigTextLine(2, "row: %d", row);
 		}
 		if(getButtonPress(buttonLeft) || getButtonPress(buttonRight)) {
@@ -33,7 +32,6 @@ int getDrinkSelection() {
 		}
 	}
 	// once drink is selected return the corresponding module
-	return row + col; // equation for selecting module
 }
 
 /*
@@ -44,10 +42,53 @@ void detectDrinkRemoved() {
 }
 
 /**
- gets the user ID using the color sensor
+gets the user ID using the color sensor
 
- @return the ID related to the color the color sensor identifies
+Keep sensor on until a color has been read into the color sensor on the ev3.
+ID:
+1. Black = Edison
+2. Blue = Ethan Lem
+3. Green = Ethan Yung
+4. Yellow = Luke
+0. Other colors = Unknown
+
+@return the ID related to the color the color sensor identifies
+
 */
 int scanID() {
-	return SensorValue[COLOR_SENSOR];
+	bool flag = true;
+	int ID = 0;
+	while(flag)
+	{
+		switch (SensorValue[COLOR_SENSOR])
+		{
+		case 1:
+			ID = 1;
+			flag = false;
+			displayBigTextLine(2, "Welcome back Edison H.!");
+			break;
+		case 2:
+			ID = 2;
+			flag = false;
+			displayBigTextLine(2, "Welcome back Ethan L.!");
+			break;
+		case 3:
+			ID = 3;
+			flag = false;
+			displayBigTextLine(2, "Welcome back Ethan Y.!");
+			break;
+		case 4:
+			ID = 4;
+			flag = false;
+			displayBigTextLine(2, "Welcome back Luke Q.!");
+			break;
+		default:
+			displayBigTextLine(2, "Please scan your ID");
+			break;
+		}
+	}
+
+	//Dunno, maybe the main code or the rest of the UI Handler would benefit,
+	//like, the accounting system might need to know how much money is left in the account
+	return ID;
 }
