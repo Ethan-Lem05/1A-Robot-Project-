@@ -1,71 +1,75 @@
-/*
-This file will handle the accounts
-*/
-//set up parallel arrays
 #include "PortBindings.c"
 #include "PC_FileIO.c"
 
-/**
-structure that groups all the information related to accounts together
-*/
+// Define structure to store account information
 struct Account {
-	string name;
-	int ID;
-	float balance;
+    string name;
+    int ID;
+    float balance;
 };
+
+const string FILE_NAME = "userAccounts.txt";
 const int NUM_ACC = 4;
 Account accounts[NUM_ACC];
 
-/*
-downloads data into an array
-*/
 void downloadData() {
-	//declare input variables
-	TFileHandle fin;
-	int id = 0;
-	float balance = 0.0;
-	string name;
-	//open the file and read int it
-	if(openReadPC(fin, "accounts.txt")) {
-		for(int i = 0; i < NUM_ACC; i++) {
-			if(i == 0) {
-				readTextPC(fin,name);
-				} else if (i == 1) {
-				readIntPC(fin,id);
-				} else {
-				readFloatPC(fin,balance);
-			}
-			Account account;
-			account.ID = id;
-			account.name = name;
-			account.balance = balance;
-			accounts[i] = account;
-		}
-	}
-}
-/**
-uploads the data in the updated array into the textfile for next use.
-*/
-void uploadData() {
-	TFileHandle fout;
-	if(openWritePC(fout,"account.txt")){
-		for(int i = 0; i < NUM_ACC; i++) {
-			string output = "%d     %s     %f";
-			sprintf(output,output,accounts[i].ID,accounts[i].name,accounts[i].balance);
+    TFileHandle fin;
+    int id = 0;
+    float balance = 0.0;
+    string name = "poopy";
 
-			writeTextPC(fout, output);
-		}
-	}
+    if(openReadPC(fin, "userAccounts.txt")) {
+
+    		eraseDisplay();
+        displayTextLine(1, "File successfully loaded");
+        wait1Msec(1000);
+
+
+        for(int i = 0; i < NUM_ACC; i++) {
+
+            readIntPC(fin, id);
+            readTextPC(fin, name);
+            readFloatPC(fin, balance);
+
+            //eraseDisplay();
+            //displayTextLine(1,name);
+            //displayTextLine(1,"%d",id);
+            //displayTextLine(1,"%.2f",balance);
+            //wait1Msec(1000);
+
+            accounts[i].ID = id;
+            accounts[i].name = name;
+            accounts[i].balance = balance;
+        }
+    } else {
+    		eraseDisplay();
+        displayTextLine(1, "File not found!!!");
+        wait1Msec(5000);
+    }
+    closeFilePC(fin);
 }
-/**
-takes in the studentID and cost and returns whether or not the purchase was successful.
-*/
+
+void uploadData() {
+    TFileHandle fout;
+    if(openWritePC(fout, FILE_NAME)) {
+        for(int i = 0; i < NUM_ACC; i++) {
+            string output;
+            sprintf(output, "%d %s %.2f\n", accounts[i].ID, accounts[i].name, accounts[i].balance);
+            writeTextPC(fout, output);
+        }
+    }
+    closeFilePC(fout);
+}
+
 bool buyProduct(int userID, float cost) {
-	for(int i = 0; i < NUM_ACC; i++) {
-		if(accounts[i].ID == userID && cost <= accounts[i].balance) {
-			accounts[i].balance -= cost;
-			return true;
-		}
-	}
-	return false;
+    eraseDisplay();
+    for(int i = 0; i < NUM_ACC; i++) {
+        displayTextLine(i + 1, accounts[i].name);
+        wait1Msec(2000);
+        if(accounts[i].ID == userID && cost <= accounts[i].balance) {
+            accounts[i].balance -= cost;
+            return true;
+        }
+    }
+    return false;
 }

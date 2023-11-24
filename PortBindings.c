@@ -9,6 +9,5 @@ enum Motors {
 
 enum Sensors {
 	COLOR_SENSOR = S1,
-	TOUCH_SENSOR_1 = S2,
-	TOUCH_SENSOR_2 = S3
+	TOUCH_SENSOR_VERT = S2
 };

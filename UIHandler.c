@@ -13,25 +13,27 @@ Allows the user to select a drink module to buy from
 void getDrinkSelection(int & row, int & col) {
 	//reset values
 	// display choose your drink for 5 seconds
-	displayBigTextLine(6, "Input your drink of choice?");
+	displayTextLine(6, "Input your drink of choice?");
 	wait1Msec(5000);
 	// display select screen
-	char rowVal = 'a';
 	eraseDisplay();
 	displayBigTextLine(2, "row: %d", row);
 	displayBigTextLine(6, "col: %d", col);
 	//detect buttons pressed on the EV3
 	while(!getButtonPress(buttonEnter)) {
 		if(getButtonPress(buttonUp) || getButtonPress(buttonDown)) {
-			row == 1 ? row = 2: row = 1;
+			(row == 1) ? row = 2: row = 1;
 			displayBigTextLine(2, "row: %d", row);
 		}
 		if(getButtonPress(buttonLeft) || getButtonPress(buttonRight)) {
-			col == 1 ? col = 0: col = 1;
+			(col == 1) ? col = 2: col = 1;
 			displayBigTextLine(6, "col: %d", col);
 		}
 	}
+	row -= 1;
+	col -= 1;
 	// once drink is selected return the corresponding module
+	//clear screen
 }
 
 /*
@@ -56,39 +58,21 @@ ID:
 
 */
 int scanID() {
-	bool flag = true;
-	int ID = 0;
-	while(flag)
+	while(true)
 	{
 		switch (SensorValue[COLOR_SENSOR])
 		{
-		case 1:
-			ID = 1;
-			flag = false;
-			displayBigTextLine(2, "Welcome back Edison H.!");
-			break;
 		case 2:
-			ID = 2;
-			flag = false;
-			displayBigTextLine(2, "Welcome back Ethan L.!");
-			break;
+			return 2;
 		case 3:
-			ID = 3;
-			flag = false;
-			displayBigTextLine(2, "Welcome back Ethan Y.!");
-			break;
+			return 3;
 		case 4:
-			ID = 4;
-			flag = false;
-			displayBigTextLine(2, "Welcome back Luke Q.!");
-			break;
+			return 4;
+		case 5:
+			return 5;
 		default:
-			displayBigTextLine(2, "Please scan your ID");
+			displayTextLine(2, "Please scan your ID");
 			break;
 		}
 	}
-
-	//Dunno, maybe the main code or the rest of the UI Handler would benefit,
-	//like, the accounting system might need to know how much money is left in the account
-	return ID;
 }
