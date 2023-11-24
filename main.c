@@ -75,7 +75,11 @@ RobotState deliveryState (int row, int col) {
 	eraseDisplay();
 	displayBigTextLine(2, "Please wait...");
 
-	moveToDrink(row, col);
+	if(row == 0) {
+		if(col == 0) {getDrink(3); } else { getDrink(4); }
+	} else {
+		if(col == 0) {getDrink(1); } else { getDrink(2); }
+}
 	displayBigTextLine(2, "Thank you!");
 	wait1Msec(2000);
 	return IDLE_STATE;
@@ -113,14 +117,9 @@ void configuration() {
 */
 task main()
 {
-	//test code
 
-	initializeCoordinates();
-	moveToDrink(0,0);
-	/*
 	configuration();
 	downloadData();
-	initializeCoordinates();
 	RobotState state = IDLE_STATE;
 	int row = 1; // number that ranges from 0-3 indicating which module the drink belongs to
 	int col = 1;
@@ -136,13 +135,10 @@ task main()
 			state = paymentState();
 			break;
 		case DELIVERY_STATE:
-			eraseDisplay();
-			displayTextLine(5, "%d, %d", row, col);
-			wait1Msec(5000);
 			state = deliveryState(row, col);
 			break;
 		}
 		uploadData();
 	}
-	*/
+
 }

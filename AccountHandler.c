@@ -16,7 +16,7 @@ void downloadData() {
     TFileHandle fin;
     int id = 0;
     float balance = 0.0;
-    string name = "poopy";
+    string name;
 
     if(openReadPC(fin, "userAccounts.txt")) {
 
@@ -30,12 +30,6 @@ void downloadData() {
             readIntPC(fin, id);
             readTextPC(fin, name);
             readFloatPC(fin, balance);
-
-            //eraseDisplay();
-            //displayTextLine(1,name);
-            //displayTextLine(1,"%d",id);
-            //displayTextLine(1,"%.2f",balance);
-            //wait1Msec(1000);
 
             accounts[i].ID = id;
             accounts[i].name = name;
@@ -51,12 +45,18 @@ void downloadData() {
 
 void uploadData() {
     TFileHandle fout;
-    if(openWritePC(fout, FILE_NAME)) {
+    eraseDisplay();
+    bool openedFile = openWritePC(fout, FILE_NAME);
+    displayTextLine(5, "%d", openedFile);
+    wait1Msec(2000);
+    if(openedFile) {
         for(int i = 0; i < NUM_ACC; i++) {
             string output;
             sprintf(output, "%d %s %.2f\n", accounts[i].ID, accounts[i].name, accounts[i].balance);
             writeTextPC(fout, output);
         }
+    } else {
+    	displayTextLine(5, "FAILED TO WRITE TO FILE");
     }
     closeFilePC(fout);
 }
@@ -64,9 +64,9 @@ void uploadData() {
 bool buyProduct(int userID, float cost) {
     eraseDisplay();
     for(int i = 0; i < NUM_ACC; i++) {
-        displayTextLine(i + 1, accounts[i].name);
-        wait1Msec(2000);
         if(accounts[i].ID == userID && cost <= accounts[i].balance) {
+        	eraseDisplay();
+        		displayTextLine(5, "%s has been billed $20!", accounts[i].name);
             accounts[i].balance -= cost;
             return true;
         }
