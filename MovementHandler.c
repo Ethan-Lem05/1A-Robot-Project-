@@ -2,9 +2,16 @@
 This file deals with the movement of the 2 axis machine
 */
 #include "PortBindings.c"
+<<<<<<< Updated upstream
 const int NUM_MODULES = 2;
 const int DRIVING_WHEEL_SPEED = 50;
 const int MESHING_WHEEL_SPEED = DRIVING_WHEEL_SPEED - 40;
+=======
+const int DRIVING_WHEEL_SPEED = 70;
+const int ENCODERFLOOR1 = 2100;
+const int XENCODERMIDDLE = 190;
+const int XSIDE = 500;
+>>>>>>> Stashed changes
 
 const int MESHING_DELTA_Y = 15;
 int xCoords[NUM_MODULES];
@@ -78,6 +85,7 @@ void grabDrink() {
 	motor[VERT_AXIS_MOTOR] = MESHING_WHEEL_SPEED;
 	while(abs(nMotorEncoder(VERT_AXIS_MOTOR)) < curEncVal + MESHING_DELTA_Y) {
 	}
+<<<<<<< Updated upstream
 	motor[VERT_AXIS_MOTOR] = 0;
 	wait1Msec(500);
 	spinWheel();
@@ -85,6 +93,25 @@ void grabDrink() {
 	while(abs(nMotorEncoder(VERT_AXIS_MOTOR)) > curEncVal) {
 	}
 	motor[VERT_AXIS_MOTOR] = 0;
+=======
+
+	moveYUp(200);
+}
+
+void defaultPos()
+{
+	deliver();
+
+	moveYUp(ENCODERFLOOR1);
+}
+
+void spinWheel()
+{
+	motor[MESHED_WHEEL_MOTOR] = 10;
+	wait1Msec(2500);
+
+	motor[MESHED_WHEEL_MOTOR] = 0;
+>>>>>>> Stashed changes
 	wait1Msec(500);
 }
 /*
@@ -108,11 +135,41 @@ void moveToDrink(int col, int row) {
 
 	/*
 
+<<<<<<< Updated upstream
 
 //--------------------------------------------------------------------------------------------------------------------
 	int MAX_HEIGHTBEFOREMESH = 1500;
 	int MOTORSPEED = 50;
 	int MIDX = 175;
+=======
+	eraseDisplay();
+	displayBigTextLine(5, "Getting Drink");
+	switch(module)
+	{
+		case 1:
+			moveYUp(ENCODERFLOOR1);
+			moveXFor(XSIDE);
+			break;
+		case 2:
+			moveYUp(ENCODERFLOOR1);
+			moveXRev(-XSIDE);
+			break;
+		case 3:
+			moveYDown(-200);
+			moveXFor(XSIDE);
+			break;
+		case 4:
+			moveYDown(-200);
+			moveXRev(-XSIDE);
+			break;
+	}
+
+	eraseDisplay();
+	displayBigTextLine(5, "Obtaining");
+	moveYUp(300);
+	spinWheel();
+	moveYDown(-300);
+>>>>>>> Stashed changes
 
 	nMotorEncoder(motorA)=0;
 	nMotorEncoder(motorB)=0;

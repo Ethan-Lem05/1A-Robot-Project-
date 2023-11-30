@@ -51,7 +51,14 @@ void downloadData() {
 
 void uploadData() {
     TFileHandle fout;
+<<<<<<< Updated upstream
     if(openWritePC(fout, FILE_NAME)) {
+=======
+    eraseDisplay();
+    bool openedFile = openWritePC(fout, "userAccounts.txt");
+    wait1Msec(2000);
+    if(openedFile) {
+>>>>>>> Stashed changes
         for(int i = 0; i < NUM_ACC; i++) {
             string output;
             sprintf(output, "%d %s %.2f\n", accounts[i].ID, accounts[i].name, accounts[i].balance);
@@ -68,6 +75,10 @@ bool buyProduct(int userID, float cost) {
         wait1Msec(2000);
         if(accounts[i].ID == userID && cost <= accounts[i].balance) {
             accounts[i].balance -= cost;
+            eraseDisplay();
+        		displayTextLine(5, "%s has been billed $20!", accounts[i].name);
+        		displayTextLine(6, "Your account balancce is $%.2f", accounts[i].balance);
+        		wait1Msec(10000);
             return true;
         }
     }

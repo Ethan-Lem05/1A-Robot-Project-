@@ -10,6 +10,8 @@ This file is responsible for running all the code as well as storing any constan
 holds all the different possible robot states
 */
 
+int module = 0;
+
 enum RobotState
 {
 	IDLE_STATE,
@@ -35,12 +37,18 @@ RobotState idleState() {
 /**
 runs if robot is in selection state
 */
-RobotState selectionState (int & row, int & col) {
-	eraseDisplay();
-	//prompt user for input
-	getDrinkSelection(row, col);
-	//select the drink choice by reference
-	return PAYMENT_STATE;
+RobotState selectionState () {
+	//time1[T1] = 0;
+	//while(time1[T1] < 10000)
+	//{
+		eraseDisplay();
+		//prompt user for input
+		module = getDrinkSelection();
+
+		//select the drink choice by reference
+		return PAYMENT_STATE;
+	//}
+	//return IDLE_STATE;
 }
 /*
 runs if robot is in payment state
@@ -48,6 +56,9 @@ runs if robot is in payment state
 @returns returns the robots next state.
 */
 RobotState paymentState () {
+	//time1[T1] = 0;
+	//while(time1[T1] < 10000)
+	//{
 	eraseDisplay();
 	//let user scan
 	int userID = scanID();
@@ -55,30 +66,43 @@ RobotState paymentState () {
 	//make the payment
 	if (buyProduct(userID, DRINK_COST)) {
 		eraseDisplay();
-		displayBigTextLine(2, "Purchase successful");
+		displayBigTextLine(2, "Success!");
 		wait1Msec(1000);
 		return DELIVERY_STATE;
 	} else {
 		eraseDisplay();
-		displayBigTextLine(2, "Purchase unsuccessful");
+		displayBigTextLine(2, "Unsuccessful");
 		wait1Msec(1000);
 		eraseDisplay();
 		return SELECTION_STATE;
-	}
+	//}
+}
+
+return IDLE_STATE;
 }
 /*
 runs if robot is in delivery state.
 
 @returns returns the robots next state.
 */
-RobotState deliveryState (int row, int col) {
-	eraseDisplay();
-	displayBigTextLine(2, "Please wait...");
+RobotState deliveryState () {
+		eraseDisplay();
+		displayBigTextLine(2, "Please wait...");
+		//row -= 1;
+		//col -= 1;
 
+<<<<<<< Updated upstream
 	moveToDrink(row, col);
 	displayBigTextLine(2, "Thank you!");
 	wait1Msec(2000);
 	return IDLE_STATE;
+=======
+		getDrink(module);
+
+		displayBigTextLine(2, "Thank you!");
+		wait1Msec(2000);
+		return IDLE_STATE;
+>>>>>>> Stashed changes
 }
 /**
 configures all the senors and motors to their proper state
@@ -86,6 +110,9 @@ configures all the senors and motors to their proper state
 void configuration() {
 	  // Configure Color Sensor on Port 1
     SensorType[COLOR_SENSOR] = sensorEV3_Color;
+		wait1Msec(50);
+		SensorMode[COLOR_SENSOR] = modeEV3Color_Color;
+		wait1Msec(100);
 
     // Configure touch Sensor on Port 2
     SensorType[TOUCH_SENSOR_VERT] = sensorEV3_Touch;
@@ -122,24 +149,28 @@ task main()
 	downloadData();
 	initializeCoordinates();
 	RobotState state = IDLE_STATE;
-	int row = 1; // number that ranges from 0-3 indicating which module the drink belongs to
-	int col = 1;
 	while(true) {
+		int row = 1; // number that ranges from 0-3 indicating which module the drink belongs to
+		int col = 1;
 		switch(state){
 		case IDLE_STATE:
 			state = idleState();
 			break;
 		case SELECTION_STATE:
-			state = selectionState(row,col);
+			state = selectionState();
 			break;
 		case PAYMENT_STATE:
 			state = paymentState();
 			break;
 		case DELIVERY_STATE:
+<<<<<<< Updated upstream
 			eraseDisplay();
 			displayTextLine(5, "%d, %d", row, col);
 			wait1Msec(5000);
 			state = deliveryState(row, col);
+=======
+			state = deliveryState();
+>>>>>>> Stashed changes
 			break;
 		}
 		uploadData();

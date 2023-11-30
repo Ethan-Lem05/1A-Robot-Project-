@@ -10,8 +10,12 @@ Allows the user to select a drink module to buy from
 
 @returns the relevant module
 */
-void getDrinkSelection(int & row, int & col) {
+int getDrinkSelection() {
 	//reset values
+	int col = 1;
+	int row = 1;
+	int module = 0;
+
 	// display choose your drink for 5 seconds
 	displayTextLine(6, "Input your drink of choice?");
 	wait1Msec(5000);
@@ -22,18 +26,28 @@ void getDrinkSelection(int & row, int & col) {
 	//detect buttons pressed on the EV3
 	while(!getButtonPress(buttonEnter)) {
 		if(getButtonPress(buttonUp) || getButtonPress(buttonDown)) {
-			(row == 1) ? row = 2: row = 1;
+			if(row == 1) {row = 2;} else { row = 1; }
 			displayBigTextLine(2, "row: %d", row);
 		}
 		if(getButtonPress(buttonLeft) || getButtonPress(buttonRight)) {
-			(col == 1) ? col = 2: col = 1;
+			if(col == 1){ col = 2; } else {col = 1;}
 			displayBigTextLine(6, "col: %d", col);
 		}
 	}
-	row -= 1;
-	col -= 1;
 	// once drink is selected return the corresponding module
 	//clear screen
+
+	if(row == 1) {
+			if(col == 1) {module = 1; } else { module = 2; }
+		} else if(row == 2){
+			if(col == 1) {module = 3; } else { module = 4; }
+		}
+
+		eraseDisplay();
+		displayBigTextLine(6, "col: %d", col);
+		wait1Msec(2000);
+
+		return module;
 }
 
 /*
